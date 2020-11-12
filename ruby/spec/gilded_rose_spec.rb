@@ -1,5 +1,5 @@
 require 'approvals/rspec'
-require File.join(File.dirname(__FILE__), 'gilded_rose')
+require 'gilded_rose'
 
 describe GildedRose do
 
@@ -7,7 +7,7 @@ describe GildedRose do
     it 'Output remains consistent' do
       verify do
         Dir.chdir(__dir__){
-          `ruby texttest_fixture.rb`
+          `RUBYLIB="#{$:.join(':')}"; ruby texttest_fixture.rb`
         }
       end
     end
