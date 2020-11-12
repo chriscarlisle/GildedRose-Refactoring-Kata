@@ -28,6 +28,11 @@ describe ItemCategory do
       expect(category).to be_a EventTicket
     end
 
+    it 'Identifies Conjured Items' do
+      category = ItemCategory.from_item(item_factory(name: 'Conjured Mana Cake'))
+      expect(category).to be_a ConjuredItem
+    end
+
   end
 
 end
@@ -135,6 +140,34 @@ describe EventTicket do
 
     it 'Reduces the quality to zero after the event' do
       EventTicket.new.age(item = item_factory(sell_in: 0, quality: 10))
+      expect(item.quality).to eq(0)
+    end
+
+  end
+
+end
+
+describe ConjuredItem do
+
+  describe '#age' do
+
+    it 'Reduces the sell by date by one' do
+      ConjuredItem.new.age(item = item_factory(sell_in: 10))
+      expect(item.sell_in).to eq(9)
+    end
+
+    it 'Reduces the quality by two before the sell by date has passed' do
+      ConjuredItem.new.age(item = item_factory(sell_in: 1, quality: 10))
+      expect(item.quality).to eq(8)
+    end
+
+    it 'Reduces the quality by four after the sell by date has passed' do
+      ConjuredItem.new.age(item = item_factory(sell_in: 0, quality: 10))
+      expect(item.quality).to eq(6)
+    end
+
+    it 'Wont reduce the quality beyond 0' do
+      ConjuredItem.new.age(item = item_factory(quality: 0))
       expect(item.quality).to eq(0)
     end
 

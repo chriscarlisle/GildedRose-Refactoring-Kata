@@ -77,3 +77,18 @@ class LegendaryItem
   end
 
 end
+
+# Conjured Items degrade in Quality twice as fast as normal items
+class ConjuredItem
+
+  def age(item)
+    if item.sell_in > 0
+      item.quality = [0, item.quality - 2].max
+    else
+      item.quality = [0, item.quality - 4].max
+    end
+
+    item.sell_in -= 1
+  end
+
+end
